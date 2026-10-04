@@ -1,8 +1,9 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as lambda from 'aws-cdk-lib/aws-lambda'
 import * as lambdaNodejs from 'aws-cdk-lib/aws-lambda-nodejs'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
 export class ProductAppStack extends cdk.Stack {
   readonly productsHandler: lambdaNodejs.NodejsFunction;
@@ -16,6 +17,10 @@ export class ProductAppStack extends cdk.Stack {
       handler: "handler",//method handler from the lambda function
       runtime: lambda.Runtime.NODEJS_20_X,
       memorySize: 256,
+      environment: {
+        IAM_AWS_REGION: process.env.IAM_AWS_REGION!,
+        IAM_AWS_ACCOUNT: process.env.IAM_AWS_ACCOUNT!
+      },
       timeout: cdk.Duration.seconds(8),
       bundling: {
         minify: true,
